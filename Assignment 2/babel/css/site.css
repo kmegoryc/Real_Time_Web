@@ -1,0 +1,68 @@
+body {
+	background-color: #FFFFFF;
+}
+#messageboard {
+	height: 260px;
+	width: 80%;
+	border: 1px solid grey;
+	border-radius: 3px;
+	overflow-y: auto;
+}
+#messageboard .item {
+	padding: 8px 20px;
+}
+.chat-stripe {
+	background: rgb(102, 179, 255); /* For browsers that do not support gradients */
+	background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0), rgb(9, 165, 179)); /*Safari 5.1-6*/
+	background: -o-linear-gradient(right, rgba(0, 0, 0, 0), rgb(9, 165, 179)); /*Opera 11.1-12*/
+	background: -moz-linear-gradient(right, rgba(0, 0, 0, 0), rgb(9, 165, 179)); /*Fx 3.6-15*/
+	background: linear-gradient(to right, rgba(0, 0, 0, 0), rgb(9, 165, 179)); /*Standard*/
+	height: 25px;
+	width: 100%;
+}
+.text.container {
+	margin-top: 100px;
+}
+.ui.menu {
+	margin: 0;
+}
+.main.container {
+	margin-top: 2em;
+}
+.main.menu {
+	margin-top: 2em;
+	border-radius: 0;
+	border: none;
+	box-shadow: none;
+	transition: box-shadow 0.5s ease, padding 0.5s ease;
+}
+.main.menu .item img.logo {
+	margin-right: 1.5em;
+}
+.overlay {
+	float: left;
+	margin: 0em 3em 1em 0em;
+}
+.overlay .menu {
+	position: relative;
+	left: 0;
+	transition: left 0.5s ease;
+}
+.main.menu.fixed {
+	background-color: #FFFFFF;
+	border: 1px solid #DDD;
+	box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+}
+.overlay.fixed .menu {
+	left: 800px;
+}
+.text.container .left.floated.image {
+	margin: 2em 2em 2em -4em;
+}
+.text.container .right.floated.image {
+	margin: 2em -4em 2em 2em;
+}
+.ui.footer.segment {
+	margin: 5em 0em 0em;
+	padding: 5em 0em;
+}

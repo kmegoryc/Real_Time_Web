@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="shortcut icon" href="">
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+		<title>Babble</title>
+		<link rel="stylesheet" type="text/css" href="dist/components/reset.css">
+		<link rel="stylesheet" type="text/css" href="dist/components/site.css">
+		<link rel="stylesheet" type="text/css" href="dist/components/container.css">
+		<link rel="stylesheet" type="text/css" href="dist/components/button.css">
+		<link rel="stylesheet" type="text/css" href="dist/components/input.css">
+		<link rel="stylesheet" type="text/css" href="dist/components/grid.css">
+		<link rel="stylesheet" type="text/css" href="dist/components/header.css">
+		<link rel="stylesheet" type="text/css" href="dist/components/image.css">
+		<link rel="stylesheet" type="text/css" href="dist/components/menu.css">
+		<link rel="stylesheet" type="text/css" href="dist/components/divider.css">
+		<link rel="stylesheet" type="text/css" href="dist/components/list.css">
+		<link rel="stylesheet" type="text/css" href="dist/components/segment.css">
+		<link rel="stylesheet" type="text/css" href="dist/components/dropdown.css">
+		<link rel="stylesheet" type="text/css" href="dist/components/icon.css">
+		<link rel="stylesheet" type="text/css" href="dist/components/transition.css">
+		<link rel="stylesheet" type="text/css" href="dist/components/form.css">
+		<link rel="stylesheet" type="text/css" href="dist/components/dropdown.css">
+		<script src="assets/library/jquery.min.js"></script>
+		<script src="dist/components/transition.js"></script>
+		<script src="dist/components/dropdown.js"></script>
+		<script src="dist/components/visibility.js"></script>
+		<script src="dist/components/form.js"></script>
+		<script src="js/site.js"></script>
+		<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/site.css">
+		<script>
+			var updateScroll = function() {
+				var messageBoard = document.getElementById("messageboard");
+				messageBoard.scrollTop = messageBoard.scrollHeight;
+			}
+			var socket = io.connect();
+			socket.on('connect', function() {
+				console.log("Connected");
+			});
+			// Receive from any event - this is received from the server's broadcast.emit
+			socket.on('chatmessage', function(data) {
+				console.log(data);
+
+				//data[0] = message
+				//data[1] = socket.id
+				//data[2] = username
+				//data[3] = color
+
+				if (data[2] == ""){
+					data[2] = "Anonymous User"
+				}
+
+				if (data[3] == ""){
+					data[3] = "white";
+				}
+
+				var messageboard = document.getElementById('messageboard');
+				var newContent = document.createElement('div');
+				newContent.setAttribute("class", "item");
+				newContent.setAttribute("id", "messageBoardItem");
+				newContent.appendChild(document.createTextNode(data[2] + ": " + data[0]));
+				messageboard.appendChild(newContent);
+				newContent.style.backgroundColor = data[3];
+				updateScroll();
+			});
+			
+			var sendmessage = function(message) {
+				//print to browser console the event that's happening
+				console.log("Chat Message: " + message);
+				//emit this event to the server
+				socket.emit('chatmessage', message);
+				//clear input value after submit is clicked
+				document.getElementById('message').value="";
+			};
+		</script>
+	</head>
+	<body>
+		<div class="ui fixed inverted menu">
+			<div class="ui container">
+				<a href="#" class="header item">
+					<img class="logo" src="assets/images/chat.png">
+					Babel
+				</a>
+				<a href="#" class="item">Home</a>
+				<a href="#" class="item">Messages</a>
+				<div class="ui simple dropdown item">
+					Settings <i class="dropdown icon"></i>
+					<div class="menu">
+						<a class="item" href="#">Profile</a>
+						<a class="item" href="#">Chat History</a>
+						<div class="divider"></div>
+						<div class="header">Advanced Settings</div>
+						<a class="item" href="#">Privacy</a>
+					</div>
+				</div>
+			</div>
+			<div class="chat-stripe"></div>
+		</div>
+	</div>
+	<div class="ui text container">
+		<p>Welcome to Babel! Babel is a chatroom for users to talk to anyone else in the world who is on its webpage at the same time. Additionally, users can choose their preferred name and chat color. The chosen colors and names can be changed at any time during the chat.</p>
+		<br>
+		<div class="ui form">
+			<div class="two fields">
+				<!-- Save Name -->
+				<div class="field">
+					<label>Name</label>
+					<input id="username" type="text" placeholder="Name...">
+				</div>
+				<!-- Save Color -->
+				<div class="field">
+					<label>Color Pick</label>
+					<select id="color" class="ui search dropdown">
+						<option value="">Pick A Color...</option>
+						<option value="#946b91">Eggplant</option>
+						<option value="#726DA8">Lavender</option>
+						<option value="#7D8CC4">Lagoon</option>
+						<option value="#A0D2DB">Aquamarine</option>
+						<option value="#BEE7E8">Lilipad</option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<div>
+			<div class="ui action input">
+				<!-- Send Message -->
+				<input type="text" id="message" name="message" placeholder="Message...">
+				<button type="submit" value="submit" class="ui labeled icon primary button" onclick="sendmessage([(document.getElementById('message').value), socket.id, (document.getElementById('username').value), (document.getElementById('color').value)]);"><i class="send icon"></i>Send</button>
+			</div>
+		</div>
+		<br>
+		<div>
+			<div id="messageboard" class="ui list">
+			</div>
+		</div>
+	</div>
+	<div class="ui inverted vertical footer segment">
+		<div class="ui center aligned container">
+			<div class="ui stackable inverted divided grid">
+				<div class="four wide column">
+					<h4 class="ui inverted header">Navigation</h4>
+					<div class="ui inverted link list">
+						<a href="#" class="item">Home</a>
+						<a href="#" class="item">Messages</a>
+						<a href="#" class="item">Settings</a>
+					</div>
+				</div>
+				<div class="four wide column">
+					<h4 class="ui inverted header">Extras</h4>
+					<div class="ui inverted link list">
+						<a href="#" class="item">Profile</a>
+						<a href="#" class="item">Chat History</a>
+						<a href="#" class="item">Privacy</a>
+					</div>
+				</div>
+				<div class="seven wide column">
+					<h4 class="ui inverted header">Babble</h4>
+					<p>Talk to anyone in the world.</p>
+				</div>
+			</div>
+			<div class="ui inverted section divider"></div>
+			<img src="assets/images/chat.png" class="ui centered mini image">
+			<div class="ui horizontal inverted small divided link list">
+				<a class="item" href="#">Site Map</a>
+				<a class="item" href="#">Contact Us</a>
+				<a class="item" href="#">Terms and Conditions</a>
+				<a class="item" href="#">Privacy Policy</a>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
