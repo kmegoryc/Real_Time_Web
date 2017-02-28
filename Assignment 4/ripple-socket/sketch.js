@@ -1,7 +1,12 @@
 var ripples = []; // empty array named ripples
 
+function preload() {
+  mySound = loadSound('assets/waterdrop.wav');
+}
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  mySound.setVolume(0.1);
   noFill();
 }
 
@@ -11,12 +16,19 @@ function draw() {
   for (var i = 0; i < ripples.length; i++) {
     ripples[i].grow();
     ripples[i].display();
+    //check if the ripple has disappeared, if so, remove it from the ripples array
+    if(ripples[i].a <= 0) {
+      ripples.splice(i, 1);
+    }
   }
 }
 
 function mousePressed() {
   // adds a Ripple to the ripples array
   ripples.push(new Ripple(mouseX, mouseY));
+  console.log(ripples)
+  //play water drop sound
+  mySound.play();
   // when the mouse is pressed, send Ripple data 
   sendRipple(
     {
