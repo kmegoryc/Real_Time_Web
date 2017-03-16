@@ -1,0 +1,51 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <!-- to get rid of favicon request in console -->
+    <link rel="shortcut icon" href="">
+    <link href="https://fonts.googleapis.com/css?family=Raleway|Ranga:400,700" rel="stylesheet">
+    <!-- P5 STUFF -->
+    <script language="javascript" type="text/javascript" src="libraries/p5.js"></script>
+    <script language="javascript" type="text/javascript" src="dsketch.js"></script>
+    <!-- SOCKET STUFF -->
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+    
+    /// SOCKET STUFF
+    var socket = io.connect();
+    
+    socket.on('connect', function() {
+    console.log("Desktop device connected");
+    });
+
+    //listen for socket events from the server
+    socket.on('sendLocation', function(data) {
+      //call a function to update this received data
+      updateLocation(data.touch);
+    })
+
+    </script>
+    <style> 
+      body {
+        padding: 0; margin: 0;
+      }
+      .container {
+        position: absolute;
+      } 
+      #scorelabel, #score {
+        position: absolute;
+        top: 20;
+        left: 10;
+        color: white;
+        font-family: 'Raleway', sans-serif;
+      }
+      #score {
+        top: 60;
+      }
+    </style>
+  </head>
+  <body>
+    <h2 id="scorelabel">Collaborative Score:</h2>
+    <h1 id="score">0</h1>
+  </body>
+</html>
